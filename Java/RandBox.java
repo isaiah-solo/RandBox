@@ -141,6 +141,7 @@ public class RandBox {
          choice -= elemValue;
          if (choice <= 0) {
             chosenElem = elem.getKey();
+            break;
          }
       }
       return chosenElem;
