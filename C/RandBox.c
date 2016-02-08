@@ -121,7 +121,6 @@ int pick_randbox_elem (RandBox *rb, char *elem)
       srand((unsigned int) time(NULL));
       init_rand = true;
    }
-
    int choice = rand() % rb->size + 1;
    Element *curr = rb->first;
    while (curr != NULL)
@@ -135,4 +134,18 @@ int pick_randbox_elem (RandBox *rb, char *elem)
       curr = curr->next;
    }
    return 1;
+}
+
+/**
+ * Chooses multiple random elements from RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param choice_list: Array of elements chosen from RandBox
+ * @param amount: Amount of elements to be picked
+ * @return Success or failure
+ */
+int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount) {
+   int result = 0;
+   for (int i = 0; i < amount; i++) result += pick_randbox_elem(rb, choice_list[i]);
+   return result;
 }
