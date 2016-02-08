@@ -132,7 +132,33 @@ int delete_randbox_elem (RandBox *rb, char *name) {
    }
 
    // Free allocated memory
+   free(curr->name);
    free(curr);
+   return 0;
+}
+
+/**
+ * Deletes all elements from RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @return Success or failure
+ */
+int delete_randbox_all (RandBox *rb) {
+   // If RandBox is empty
+   if (rb->first == NULL) return 1;
+
+   // Point to first element
+   Element *curr = rb->first;
+
+   // Loop through each element
+   while (curr != NULL) {
+      // Create temporary pointer
+      Element *temp = curr;
+
+      // Delete the first element as it goes along
+      curr = curr->next;
+      free(temp);
+   }
    return 0;
 }
 

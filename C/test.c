@@ -19,8 +19,8 @@ int main (char** argv, int argc) {
    test += pick_randbox_elem_mult(rb, random, 10);
    for (int i = 0; i < 10; i++) {
       printf("%s\n", random[i]);
-      delete_randbox_elem(rb, random[i]);
    }
-   free(random);
+   delete_randbox_all(rb);
+   //free(random);
    return 0;
 }
