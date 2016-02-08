@@ -1,18 +1,8 @@
-#include "RandBox.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct _RandBox {
-   Element *first;
-   int size;
-};
-
-struct _Element {
-   char *name;
-   int amount;
-   Element *next;
-};
+#include "RandBox.h"
 
 /**
  * Helper function to find specific element in RandBox
