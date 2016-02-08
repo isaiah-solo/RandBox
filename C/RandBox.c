@@ -15,11 +15,15 @@
  */
 static int find_elem(Element *curr, char *query)
 {
+   // Loop through RandBox
    while (curr->next != NULL)
    {
+      // If element found
       if (strcmp(curr->name, query) == 0) break;
       curr = curr->next;
    }
+
+   // If current element or last element matches query
    if (strcmp(curr->name, query) == 0) return 0;
    return 1;
 }
@@ -32,6 +36,7 @@ static int find_elem(Element *curr, char *query)
  */
 int init_randbox (RandBox *rb)
 {
+   // Set initial size to zero
    rb->size = 0;
    return 0;
 }
@@ -140,6 +145,7 @@ int delete_randbox_elem (RandBox *rb, char *name) {
  */
 int size_randbox (RandBox *rb, int *size)
 {
+   // Copy size of RandBox to reference integer
    *size = rb->size;
    return 0;
 }
@@ -158,18 +164,32 @@ static bool init_rand = false;
  */
 int pick_randbox_elem (RandBox *rb, char *elem)
 {
+   // If rand() in not initialized
    if (! init_rand)
    {
+      // Initialize rand()
       srand((unsigned int) time(NULL));
+
+      // Set initialized rand() boolean to true
       init_rand = true;
    }
+
+   // Choose random integer
    int choice = rand() % rb->size + 1;
+
+   // Point to first element
    Element *curr = rb->first;
+
+   // Loop through RandBox until element is picked
    while (curr != NULL)
    {
+      // Subtract from random number
       choice -= curr->amount;
+
+      // If random number becomes zero
       if (choice <= 0)
       {
+         // Copy element to reference string
          strcpy(elem, curr->name);
          return 0;
       }
@@ -189,6 +209,8 @@ int pick_randbox_elem (RandBox *rb, char *elem)
 int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount)
 {
    int result = 0;
+
+   // Loop through pick function 
    for (int i = 0; i < amount; i++) result += pick_randbox_elem(rb, choice_list[i]);
    return result;
 }
