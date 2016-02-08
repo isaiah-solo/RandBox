@@ -49,6 +49,15 @@ int init_randbox (RandBox *rb);
 int add_randbox_elem (RandBox *rb, char *new_name, int new_amount);
 
 /**
+ * Deletes specified element from RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param name: Name of element to delete
+ * @return Success or failure
+ */
+int delete_randbox_elem (RandBox *rb, char *name);
+
+/**
  * Returns number of elements in RandBox
  *
  * @param rb: Reference to RandBox

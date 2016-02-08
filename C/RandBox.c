@@ -13,7 +13,7 @@
  * @param query: String containing name to search
  * @return If element found or not found
  */
-static int find_element(Element *curr, char *query)
+static int find_elem(Element *curr, char *query)
 {
    while (curr->next != NULL)
    {
@@ -68,7 +68,7 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
       Element *curr = rb->first;
 
       // Search for element in RandBox
-      int result = find_element(curr, new_name);
+      int result = find_elem(curr, new_name);
 
       // If element not found
       if (result == 1)
@@ -86,6 +86,48 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
 
    // Increase size
    rb->size += new_amount;
+   return 0;
+}
+
+/**
+ * Deletes specified element from RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param name: Name of element to delete
+ * @return Success or failure
+ */
+int delete_randbox_elem (RandBox *rb, char *name) {
+   // If RandBox is empty
+   if (rb->first == NULL || rb->size == 0) return 1;
+
+   // Point to first element
+   Element *curr = rb->first;
+
+   // Search for element in RandBox
+   int result = find_elem(curr, name);
+
+   // If element not found
+   if (result == 1) return result;
+
+   // If element found
+   else
+   {
+      // If current is not pointing to the first element
+      if (curr != rb->first)
+      {
+         // Attach current's previous with next
+         Element *prev = rb->first;
+         Element *next = curr->next;
+         while (prev->next != curr) prev = prev->next;
+         prev->next = next;
+      }
+
+      // If current is pointing to the first element
+      else rb->first = rb->first->next;
+   }
+
+   // Free allocated memory
+   free(curr);
    return 0;
 }
 
