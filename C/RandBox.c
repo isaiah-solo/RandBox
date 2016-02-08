@@ -3,6 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct _RandBox {
+   Element *first;
+   int size;
+};
+
+struct _Element {
+   char *name;
+   int amount;
+   Element *next;
+};
+
 /**
  * Helper function to find specific element in RandBox
  *
@@ -27,8 +38,9 @@ static int find_element(Element *curr, char *query) {
  *
  * @param rb: Reference to RandBox
  */
-int init_randbox (RandBox rb) {
+int init_randbox (RandBox* rb) {
    rb->size = 0;
+   return 0;
 }
 
 /**
