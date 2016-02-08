@@ -20,6 +20,7 @@ struct _RandBox {
    Element *first;
    int size;
 };
+
 /**
 * Struct containing RandBox elements
 */
