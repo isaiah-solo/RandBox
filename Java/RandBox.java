@@ -1,9 +1,7 @@
 import java.util.*;
 
 /**
- * RANDBOX
- *
- * Java Version
+ * RANDBOX: Java Version
  *
  * Created by isayyuhh on 2/7/2016
  */
@@ -145,5 +143,19 @@ public class RandBox {
          }
       }
       return chosenElem;
+   }
+
+   /**
+    * Chooses multiple random elements from RandBox
+    *
+    * @param amount: Amount of random elements to be picked
+    * @return List containing Strings of all randomly picked elements
+    */
+   public List<String> pickMultRand (int amount) {
+      List<String> choiceList = new ArrayList<>();
+      for (int i = 0; i < amount; i++) {
+         choiceList.add(this.pickRand());
+      }
+      return choiceList;
    }
 }
