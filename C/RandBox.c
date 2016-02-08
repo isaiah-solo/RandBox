@@ -37,19 +37,6 @@ int init_randbox (RandBox *rb)
 }
 
 /**
- * Returns number of elements in RandBox
- *
- * @param rb: Reference to RandBox
- * @param size: Integer containing amount of elements in RandBox
- * @return Success or failure
- */
-int size_randbox (RandBox *rb, int *size)
-{
-   *size = rb->size;
-   return 0;
-}
-
-/**
  * Adds one or more elements to the RandBox
  *
  * @param rb: Reference to RandBox
@@ -103,6 +90,19 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
 }
 
 /**
+ * Returns number of elements in RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param size: Integer containing amount of elements in RandBox
+ * @return Success or failure
+ */
+int size_randbox (RandBox *rb, int *size)
+{
+   *size = rb->size;
+   return 0;
+}
+
+/**
  * Static variable that tells if rand() is initialized
  */
 static bool init_rand = false;
@@ -144,7 +144,8 @@ int pick_randbox_elem (RandBox *rb, char *elem)
  * @param amount: Amount of elements to be picked
  * @return Success or failure
  */
-int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount) {
+int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount)
+{
    int result = 0;
    for (int i = 0; i < amount; i++) result += pick_randbox_elem(rb, choice_list[i]);
    return result;
