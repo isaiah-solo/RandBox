@@ -1,29 +1,52 @@
 import java.util.*;
 
-public class RandGen {
-   private final static int HUNDRED = 100;
-   private final static int INIT = 1;
+/**
+ * RANDBOX
+ *
+ * Java Version
+ *
+ * Created by isayyuhh on 2/7/2016
+ */
+public class RandBox {
 
-   private int size = 0;
+   /**
+    * Maximum percentage constant
+    */
+   private final static int MAX = 100;
+
+   /**
+    * Minimum percentage constant
+    */
+   private final static int MIN = 1;
+
+   /**
+    * HashMap containing elements in RandBox
+    */
    private HashMap<String, Integer> map;
 
-   public RandGen () {
+   /**
+    * Int containing size of RandBox
+    */
+   private int size = 0;
+
+   /**
+    * Default class constructor
+    */
+   public RandBox () {
       this.map = new HashMap<>();
    }
 
-   public RandGen (String elem) {
-      this.map = new HashMap<>();
-      Integer init = new Integer(INIT);
-      this.map.put(elem, init);
-      this.size++;
-   }
-
-   public RandGen (List<String> list) {
+   /**
+    * Class constructor specifying list of elements to add
+    *
+    * @param list: List of elements to add
+    */
+   public RandBox (List<String> list) {
       this.map = new HashMap<>();
       for (String elem: list) {
          Integer check = this.map.get(elem);
          if (check == null) {
-            Integer init = new Integer(INIT);
+            Integer init = new Integer(MIN);
             this.map.put(elem, init);
          }
          else {
@@ -32,45 +55,94 @@ public class RandGen {
          this.size++;
       }
    }
-   
-   public void add (String newElem) {
+
+   /**
+    * Adds one or more elements to the RandBox
+    *
+    * @param newElem: String containing new element to be added
+    * @param amount: amount of 'newElem' to be added
+    * @return
+    */
+   public void add (String newElem, int amount) {
+      if (amount < 1) return;
       if (this.map.containsKey(newElem)) {
-         Integer newInt = new Integer(this.map.get(newElem).intValue() + 1);
-         this.map.put(newElem, newInt);
+         int prevInt = this.map.get(newElem).intValue();
+         int newInt = prevInt + amount;
+         this.map.put(newElem, new Integer(newInt));
       }
       else {
-         Integer init = new Integer(INIT);
-         this.map.put(newElem, init);
+         this.map.put(newElem, new Integer(amount));
       }
-      this.size++;
+      this.size += amount;
    }
    
+   /**
+    * Deletes specified element from RandBox
+    *
+    * Deletes nothing if element does not exist
+    *
+    * @param elem: String containing element to be deleted
+    * @return
+    */
    public void delete (String elem) {
       if (this.map.containsKey(elem)) {
          this.map.remove(elem);
          this.size--;
       }
    }
-   
-   public float checkChance (String elem) {
-      float percent = 0;
+
+   /**
+    * Deletes all elements from RandBox
+    *
+    * @return
+    */
+   public void deleteAll () {
+      this.map.clear();
+   }
+
+   /**
+    * Returns number of elements in RandBox
+    *
+    * @return Size of RandBox
+    */
+   public int size() {
+      return this.size;
+   }
+
+   /**
+    * Returns probability of specified element
+    *
+    * @param elem: String of element to check probability of
+    * @return Float containing probability of element
+    * @return Nothing if element doesnt exist
+    */
+   public float chanceOf (String elem) {
+      float percent = MIN;
       if (this.map.containsKey(elem)) {
-         percent = ((float) this.map.get(elem) * 100) / ((float) HUNDRED);
+         percent = ((float) this.map.get(elem) * 100) / ((float) MAX);
       }
       return percent;
    }
 
+   /**
+    * Chooses a random element from RandBox
+    *
+    * @return String of randomly picked element
+    */
    public String pickRand () {
+      String chosenElem = "";
+
       Random rand = new Random();
       int choice = rand.nextInt(this.size) + 1;
 
       Set<Map.Entry<String, Integer>> set = map.entrySet();
       for (Map.Entry<String, Integer> elem: set) {
-         choice -= elem.getValue().intValue();
+         int elemValue = elem.getValue().intValue();
+         choice -= elemValue;
          if (choice <= 0) {
-            return elem.getKey();
+            chosenElem = elem.getKey();
          }
       }
-      return "ERROR";
+      return chosenElem;
    }
 }
