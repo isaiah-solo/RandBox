@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <stdbool.h>
 
 #include "RandBox.h"
 
@@ -9,17 +11,16 @@
  *
  * @param curr: Reference to current element
  * @param query: String containing name to search
+ * @return If element found or not found
  */
-static int find_element(Element *curr, char *query) {
-   while (curr->next != NULL) {
-      if (strcmp(curr->name, query) == 0) {
-         break;
-      }
+static int find_element(Element *curr, char *query)
+{
+   while (curr->next != NULL)
+   {
+      if (strcmp(curr->name, query) == 0) break;
       curr = curr->next;
    }
-   if (strcmp(curr->name, query) == 0) {
-      return 0;
-   }
+   if (strcmp(curr->name, query) == 0) return 0;
    return 1;
 }
 
@@ -27,9 +28,24 @@ static int find_element(Element *curr, char *query) {
  * Initializes values in RandBox
  *
  * @param rb: Reference to RandBox
+ * @return Success or failure
  */
-int init_randbox (RandBox* rb) {
+int init_randbox (RandBox *rb)
+{
    rb->size = 0;
+   return 0;
+}
+
+/**
+ * Returns number of elements in RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param size: Integer containing amount of elements in RandBox
+ * @return Success or failure
+ */
+int size_randbox (RandBox *rb, int *size)
+{
+   *size = rb->size;
    return 0;
 }
 
@@ -39,27 +55,31 @@ int init_randbox (RandBox* rb) {
  * @param rb: Reference to RandBox
  * @param new_name: String containing new element to be added
  * @param new_amount: amount of elements to be added
+ * @return Success or failure
  */
 int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
 {
    // If amount given is invalid
    if (new_amount < 1) return 1;
 
-   // Create current element pointer
-   Element *curr = rb->first;
-
    // If RandBox is Empty
-   if (curr == NULL)
+   if (rb->first == NULL)
    {
       // Create first RandBox element
-      curr = (Element *) malloc(sizeof(Element));
+      Element *curr = (Element *) malloc(sizeof(Element));
       curr->name = new_name;
       curr->amount = new_amount;
+
+      // Point first to current
+      rb->first = curr;
    }
 
    // If RandBox is not empty
    else
    {
+      // Point to first element
+      Element *curr = rb->first;
+
       // Search for element in RandBox
       int result = find_element(curr, new_name);
 
@@ -67,16 +87,52 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
       if (result == 1)
       {
          // Append new element to end of RandBox
-         curr->next = (Element *) malloc(sizeof(Element));
-         curr->next->name = new_name;
-         curr->next->amount = new_amount;
+         Element *temp = (Element *) malloc(sizeof(Element));
+         temp->name = new_name;
+         temp->amount = new_amount;
+         curr->next = temp;
       }
 
       // If element found
-      else
-      {
-         curr->amount += new_amount;
-      }
+      else curr->amount += new_amount;
    }
+
+   // Increase size
+   rb->size += new_amount;
    return 0;
+}
+
+/**
+ * Static variable that tells if rand() is initialized
+ */
+static bool init_rand = false;
+
+/**
+ * Chooses random element from RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @param elem: Element to be chosen from RandBox
+ * @return Success or failure
+ */
+int pick_randbox_elem (RandBox *rb, char *elem)
+{
+   if (! init_rand)
+   {
+      srand((unsigned int) time(NULL));
+      init_rand = true;
+   }
+
+   int choice = rand() % rb->size + 1;
+   Element *curr = rb->first;
+   while (curr != NULL)
+   {
+      choice -= curr->amount;
+      if (choice <= 0)
+      {
+         strcpy(elem, curr->name);
+         return 0;
+      }
+      curr = curr->next;
+   }
+   return 1;
 }
