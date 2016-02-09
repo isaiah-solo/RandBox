@@ -1,3 +1,5 @@
+package randbox;
+
 import java.util.*;
 
 /**
@@ -10,11 +12,11 @@ public class RandBox {
    /**
     * Constants
     */
+   private final static int INIT = 1;
    private final static int ZERO = 0;
    private final static int INCREMENT = 1;
-   private final static String EMPTY = "";
    private final static int HUNDRED = 100;
-   private final static int INIT = 1;
+   private final static String EMPTY = "";
 
    /**
     * HashMap containing elements in RandBox
