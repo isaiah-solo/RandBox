@@ -1,2 +1,4 @@
 # RandBox
-API that makes it easier for the programmer to use the rand() function.
+RandBox is a library that makes it easier for programmers to use random numbers.
+
+Supported in many programming and scripting languages.

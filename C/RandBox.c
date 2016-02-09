@@ -7,6 +7,12 @@
 #include "RandBox.h"
 
 /**
+ * RANDBOX: C Version
+ *
+ * Created by isayyuhh on 2/7/2016
+ */
+
+/**
  * Struct containing RandBox contents
  */
 struct _RandBox

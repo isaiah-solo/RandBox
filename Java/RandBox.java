@@ -10,7 +10,7 @@ import java.util.*;
 public class RandBox {
 
    /**
-    * Constants
+    * Constant Declarations
     */
    private final static int INIT = 1;
    private final static int ZERO = 0;
@@ -137,7 +137,6 @@ public class RandBox {
     *
     * @param elem: String of element to check probability of
     * @return Float containing probability of element
-    * @return Nothing if element doesnt exist
     */
    public float probability (String elem) {
       float probability = ZERO;
@@ -158,7 +157,7 @@ public class RandBox {
       String chosenElem = EMPTY;
       Random rand = new Random();
 
-      int choice = rand.nextInt(this.size()) + INCREMENT;
+      int choice = rand.nextInt(this.size()) + INIT;
 
       Set<Map.Entry<String, Integer>> set = map.entrySet();
       for (Map.Entry<String, Integer> elem: set) {
