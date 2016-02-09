@@ -29,6 +29,26 @@ public class RandBox {
    }
 
    /**
+    * Class constructor specifying array of elements to add
+    *
+    * @param list: List of elements to add
+    */
+   public RandBox (String[] array) {
+      this.map = new HashMap<>();
+      for (String elem: array) {
+         if (this.map.get(elem) == null) {
+            Integer init = new Integer(INIT);
+            this.map.put(elem, init);
+         }
+         else {
+            int prevInt = this.map.get(elem).intValue();
+            int newInt = prevInt + INCREMENT;
+            this.map.put(elem, new Integer(newInt));
+         }
+      }
+   }
+
+   /**
     * Class constructor specifying list of elements to add
     *
     * @param list: List of elements to add
@@ -54,7 +74,14 @@ public class RandBox {
     * @return Integer containing amount of elements in RandBox
     */
    public int size () {
-      return this.map.size();
+      int size = ZERO;
+      Integer[] values = this.map.values().toArray(new Integer[ZERO]);
+
+      for (Integer value: values) {
+         size += value.intValue();
+      }
+
+      return size;
    }
 
    /**
@@ -78,8 +105,6 @@ public class RandBox {
    
    /**
     * Deletes specified element from RandBox
-    *
-    * Deletes nothing if element does not exist
     *
     * @param elem: String containing element to be deleted
     * @param amount: amount of 'newElem' to be deleted
@@ -114,8 +139,9 @@ public class RandBox {
     */
    public float probability (String elem) {
       float probability = ZERO;
+
       if (this.map.containsKey(elem)) {
-         probability = ((float) this.map.get(elem) * HUNDRED) /
+         probability = ((float) this.map.get(elem).intValue() * HUNDRED) /
                        ((float) this.size());
       }
       return probability;
@@ -130,14 +156,7 @@ public class RandBox {
       String chosenElem = EMPTY;
       Random rand = new Random();
 
-      int size = ZERO;
-      Integer[] values = this.map.values().toArray(new Integer[ZERO]);
-
-      for (Integer value: values) {
-         size += value.intValue();
-      }
-
-      int choice = rand.nextInt(size) + INCREMENT;
+      int choice = rand.nextInt(this.size()) + INCREMENT;
 
       Set<Map.Entry<String, Integer>> set = map.entrySet();
       for (Map.Entry<String, Integer> elem: set) {
