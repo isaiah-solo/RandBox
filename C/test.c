@@ -9,16 +9,14 @@ int main (char** argv, int argc) {
    randbox_init(&rb);
    
    randbox_add(&rb, "red", 2);
+   randbox_add(&rb, "blue", 7);
+   
    printf("Red = %f\n", randbox_probability(&rb, "red"));
-   
-   randbox_add(&rb, "blue", 3);
    printf("Blue = %f\n", randbox_probability(&rb, "blue"));
    
-   randbox_delete(&rb, "blue", 1);
-   printf("Blue = %f\n", randbox_probability(&rb, "blue"));
+   printf("Random string: %s\n", randbox_pick(&rb));
    
    randbox_delete_all(&rb);
-   printf("Red = %f\n", randbox_probability(&rb, "red"));
    
    /*
    RandBox *rb;

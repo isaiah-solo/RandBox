@@ -68,10 +68,9 @@ float randbox_probability (RandBox **rb, char *name);
  * Chooses random element from RandBox
  *
  * @param rb: Reference to RandBox
- * @param elem: Element to be chosen from RandBox
- * @return Success or failure
- *
-int randbox_pick (RandBox **rb, char **elem);
+ * @return Element to be chosen from RandBox
+ */
+char *randbox_pick (RandBox **rb);
 
 /**
  * Chooses multiple random elements from RandBox

@@ -206,17 +206,16 @@ float randbox_probability (RandBox **rb, char *name) {
 
 /**
  * Static variable that tells if rand() is initialized
- *
+ */
 static bool init_rand = false;
 
 /**
  * Chooses random element from RandBox
  *
  * @param rb: Reference to RandBox
- * @param elem: Element to be chosen from RandBox
- * @return Success or failure
- *
-int randbox_pick (RandBox **rb, char **elem)
+ * @return Element to be chosen from RandBox
+ */
+char *randbox_pick (RandBox **rb)
 {
    // If rand() in not initialized
    if (! init_rand)
@@ -229,27 +228,18 @@ int randbox_pick (RandBox **rb, char **elem)
    }
 
    // Choose random integer
-   int choice = rand() % rb->size + 1;
-
-   // Point to first element
-   Element *curr = rb->first;
+   int choice = rand() % randbox_size(rb) + 1;
 
    // Loop through RandBox until element is picked
-   while (curr != NULL)
+   for (Element *curr = (*rb)->first; curr != NULL; curr = curr->next)
    {
       // Subtract from random number
       choice -= curr->amount;
 
-      // If random number becomes zero
-      if (choice <= 0)
-      {
-         // Copy element to reference string
-         strcpy(elem, curr->name);
-         return 0;
-      }
-      curr = curr->next;
+      // If random number becomes zero, return chosen element
+      if (choice <= 0) return curr->name;
    }
-   return 1;
+   return "FAILED";
 }
 
 /**
