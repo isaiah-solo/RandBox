@@ -5,56 +5,46 @@
 
 int main (char** argv, int argc)
 {
+   // Variables to declare, RandBox takes care of memory allocation
    RandBox *rb;
    char **multpick;
    
+   // Initialize RandBox
    randbox_init(&rb);
    
+   // Add elements to RandBox
    randbox_add(&rb, "red", 2);
-   randbox_add(&rb, "blue", 7);
+   randbox_add(&rb, "blue", 9);
+
+   // Delete elements from RandBox
+   randbox_delete(&rb, "blue", 2);
    
+   // Displaying probability of selected elements from RandBox
    printf("Red = %f\n", randbox_probability(&rb, "red"));
-   printf("Blue = %f\n", randbox_probability(&rb, "blue"));
+   printf("Blue = %f\n\n", randbox_probability(&rb, "blue"));
+
+   // Displaying size of RandBox
+   printf("Size = %d\n\n", randbox_size(&rb));
    
-   printf("Random strings:\n");
-   
+   // Random pick from RandBox
+   printf("Random 1 string:\n");
+
+   printf("%s\n\n", randbox_pick(&rb));
+
+   // Multiple random picks from RandBox
+   printf("Random 10 strings:\n");
+  
    randbox_mult_pick(&rb, &multpick, 10);
    
    for (int i; i < 10; i++) {
       printf("%s\n", multpick[i]);
    }
 
+   // Delete all elements from RandBox
    randbox_delete_all(&rb);
-   
-   /*
-   RandBox *rb;
-   char *test_text = "hello";
-   char *other_test_text = "bruh";
 
-   char **random = malloc(sizeof(char*) * 10);
-   for (int i = 0; i < 10; i++) {
-      random[i] = malloc(sizeof(char) * 100);
-   }
-   int* test = malloc(sizeof(int));
-   float *percent;
+   // Finally, free RandBox
+   free(rb);
 
-   test += init_randbox(rb);
-   size_randbox(rb, test);
-   printf("Size: %d\n", test);
-   test += add_randbox_elem(rb, test_text, 5);
-   test += add_randbox_elem(rb, other_test_text, 1);
-   test += pick_randbox_elem_mult(rb, random, 10);
-   for (int i = 0; i < 10; i++) {
-      printf("%s\n", random[i]);
-   }
-   size_randbox(rb, test);
-   printf("Size: %d\n", test);
-   chance_of_randbox(rb, percent, test_text);
-   printf("works 1\n");
-   printf("%f\n", *percent);
-   printf("works 2\n");
-   delete_randbox_all(rb);
-   //free(random);
-   */
    return 0;
 }
