@@ -33,7 +33,7 @@ int randbox_size (RandBox **rb);
  *
  * @param rb: Reference to RandBox
  * @param name: String containing new element to be added
- * @param amount: amount of elements to be added
+ * @param amount: Amount of elements to be added
  * @return Success or failure
  */
 void randbox_add (RandBox **rb, char *name, int amount);
@@ -43,6 +43,7 @@ void randbox_add (RandBox **rb, char *name, int amount);
  *
  * @param rb: Reference to RandBox
  * @param name: Name of element to delete
+ * @param amount: Amount of elements to be added
  * @return Success or failure
  */
 void randbox_delete (RandBox **rb, char *name, int amount);
@@ -58,10 +59,10 @@ void randbox_delete_all (RandBox **rb);
  * Returns probability of specified element
  *
  * @param rb: Reference to RandBox
- * @param percent: Reference to float containing probability of element
- * @return Success or failure
- *
-int randbox_chance_of (RandBox **rb, float **percent, char *name);
+ * @param name: Name of element to find probability of
+ * @return Float containing probability of element
+ */
+float randbox_probability (RandBox **rb, char *name);
 
 /**
  * Chooses random element from RandBox

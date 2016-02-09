@@ -87,7 +87,7 @@ int randbox_size (RandBox **rb)
  *
  * @param rb: Reference to RandBox
  * @param name: String containing new element to be added
- * @param amount: amount of elements to be added
+ * @param amount: Amount of elements to be added
  */
 void randbox_add (RandBox **rb, char *name, int amount)
 {
@@ -123,6 +123,7 @@ void randbox_add (RandBox **rb, char *name, int amount)
  *
  * @param rb: Reference to RandBox
  * @param name: Name of element to delete
+ * @param amount: Amount of elements to be deleted
  * @return Success or failure
  */
 void randbox_delete (RandBox **rb, char *name, int amount) {
@@ -183,19 +184,24 @@ void randbox_delete_all (RandBox **rb) {
  * Returns probability of specified element
  *
  * @param rb: Reference to RandBox
- * @param percent: Reference to float containing probability of element
- * @return Success or failure
- *
-int randbox_chance_of (RandBox **rb, float **percent, char *name) {
-   if (rb->first == NULL) return 1;
-   percent = malloc(sizeof(float));
-   Element *curr = rb->first;
-   int result = find_elem(curr, name);
-   if (result == 1) return 1;
-   float quotient = ((float)((curr->amount) * 100)) / ((float) rb->size);
-   *percent = quotient;
-   printf("percent: %f\n", *percent);
-   return 0;
+ * @param name: Name of element to find probability of
+ * @return Float containing probability of element
+ */
+float randbox_probability (RandBox **rb, char *name) {
+   // If RandBox is empty
+   if (randbox_is_empty(rb)) return 0;
+
+   float probability = 0;
+
+   // Point to first element
+   Element *curr = (*rb)->first;
+
+   // If element not found
+   if (! randbox_find(&curr, name)) return 0;
+
+   // Find probability
+   probability = ((float)((curr->amount) * 100)) / ((float) randbox_size(rb));
+   return probability;
 }
 
 /**
