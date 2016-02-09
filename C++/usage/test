@@ -1,5 +1,5 @@
 #!/bin/bash
 
-g++ *.cc ../*.cc ../*.h -o exe
+g++ -std=c++11 *.cc ../*.cc ../*.h -o exe
 ./exe
 rm exe

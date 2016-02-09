@@ -1,10 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <stdbool.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <cstdbool>
+#include <string>
+#include <iostream>
+#include <vector>
 
 #include "RandBox.h"
+
+using namespace std;
 
 /**
  * RANDBOX: C Version
@@ -30,6 +35,11 @@ struct _Element
    Element *next;
    Element *prev;
 };
+
+/**
+* Constant containing a string signifying failure
+*/
+const char *failed = "FAILED";
 
 /**
  * Helper function to check if RandBox is empty
@@ -232,8 +242,11 @@ static bool init_rand = false;
  */
 char *randbox_pick (RandBox **rb)
 {
+   string f_str = "FAILED";
+   vector<char> failed(f_str.begin(), f_str.end()); failed.push_back('\0');
+   
    // If RandBox is empty
-   if (randbox_is_empty(rb)) return "FAILED";
+   if (randbox_is_empty(rb)) return &*failed.begin();
 
    // If rand() in not initialized
    if (! init_rand)
@@ -257,7 +270,7 @@ char *randbox_pick (RandBox **rb)
       // If random number becomes zero, return chosen element
       if (choice <= 0) return curr->name;
    }
-   return "FAILED";
+   return &*failed.begin();
 }
 
 /**

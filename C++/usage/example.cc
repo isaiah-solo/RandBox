@@ -1,27 +1,36 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <vector>
 
 #include "../RandBox.h"
+
+using namespace std;
 
 int main (int argc, char** argv)
 {
    // Variables to declare, RandBox takes care of memory allocation
    RandBox *rb;
    char **multpick;
+   string red_str = "red";
+   string blue_str = "blue";
+   vector<char> red(red_str.begin(), red_str.end()); red.push_back('\0');
+   vector<char> blue(blue_str.begin(), blue_str.end()); blue.push_back('\0');
    
    // Initialize RandBox
    randbox_init(&rb);
    
    // Add elements to RandBox
-   randbox_add(&rb, "red", 2);
-   randbox_add(&rb, "blue", 9);
+   randbox_add(&rb, &*red.begin(), 2);
+   randbox_add(&rb, &*blue.begin(), 9);
 
    // Delete elements from RandBox
-   randbox_delete(&rb, "blue", 2);
+   randbox_delete(&rb, &*blue.begin(), 2);
    
    // Displaying probability of selected elements from RandBox
-   printf("Red = %f\n", randbox_probability(&rb, "red"));
-   printf("Blue = %f\n\n", randbox_probability(&rb, "blue"));
+   printf("Red = %f\n", randbox_probability(&rb, &*red.begin()));
+   printf("Blue = %f\n\n", randbox_probability(&rb, &*blue.begin()));
 
    // Displaying size of RandBox
    printf("Size = %d\n\n", randbox_size(&rb));
