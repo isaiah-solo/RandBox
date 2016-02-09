@@ -27,6 +27,7 @@ public class RandBox {
     * Default class constructor
     */
    public RandBox () {
+      // Initialize new HashMap
       this.map = new HashMap<>();
    }
 
@@ -36,13 +37,21 @@ public class RandBox {
     * @param list: List of elements to add
     */
    public RandBox (String[] array) {
+      // Initialize new HashMap
       this.map = new HashMap<>();
+
+      // Loop through array elements
       for (String elem: array) {
+         // If element not found in HashMap
          if (this.map.get(elem) == null) {
+            // Add to HashMap
             Integer init = new Integer(INIT);
             this.map.put(elem, init);
          }
+
+         // If element already in HashMap
          else {
+            // Increment amount of element in HashMap
             int prevInt = this.map.get(elem).intValue();
             int newInt = prevInt + INCREMENT;
             this.map.put(elem, new Integer(newInt));
@@ -56,13 +65,21 @@ public class RandBox {
     * @param list: List of elements to add
     */
    public RandBox (List<String> list) {
+      // Initialize new HashMap
       this.map = new HashMap<>();
+
+      // Loop through list elements
       for (String elem: list) {
+         // If element not found in HashMap
          if (this.map.get(elem) == null) {
+            // Add to HashMap
             Integer init = new Integer(INIT);
             this.map.put(elem, init);
          }
+
+         // If element already in HashMap
          else {
+            // Increment amount of element in HashMap
             int prevInt = this.map.get(elem).intValue();
             int newInt = prevInt + INCREMENT;
             this.map.put(elem, new Integer(newInt));
@@ -76,13 +93,17 @@ public class RandBox {
     * @return Integer containing amount of elements in RandBox
     */
    public int size () {
+      // Set initial size to zero
       int size = ZERO;
+
+      // Get all values in RandBox
       Integer[] values = this.map.values().toArray(new Integer[ZERO]);
 
+      // Loop through all values
       for (Integer value: values) {
+         // For each value, add to size
          size += value.intValue();
       }
-
       return size;
    }
 
@@ -94,13 +115,20 @@ public class RandBox {
     * @return
     */
    public void add (String newElem, int amount) {
+      // If invalid amount
       if (amount < 1) return;
+
+      // If element already in RandBox
       if (this.map.containsKey(newElem)) {
+         // Increment amount of element in RandBox
          int prevInt = this.map.get(newElem).intValue();
          int newInt = prevInt + amount;
          this.map.put(newElem, new Integer(newInt));
       }
+
+      // If element not in RandBox
       else {
+         // Insert into RandBox
          this.map.put(newElem, new Integer(amount));
       }
    }
@@ -113,13 +141,19 @@ public class RandBox {
     * @return
     */
    public void delete (String elem, int amount) {
+      // If element is not in RandBox
       if (! this.map.containsKey(elem)) return;
 
       int prevInt = this.map.get(elem).intValue();
       int newInt = prevInt - amount;
 
+      // If amount exceeds amount of element in RandBox
       if (prevInt < amount) return;
-      else if (prevInt < amount) this.map.remove(elem);
+
+      // Else if amount is equal to amount of element in RandBox
+      else if (prevInt == amount) this.map.remove(elem);
+
+      // Else if amount is less than amount of element in RandBox
       else this.map.put(elem, new Integer(newInt));
    }
 
@@ -129,6 +163,7 @@ public class RandBox {
     * @return
     */
    public void deleteAll () {
+      // Clear all in RandBox
       this.map.clear();
    }
 
@@ -139,9 +174,12 @@ public class RandBox {
     * @return Float containing probability of element
     */
    public float probability (String elem) {
+      // Set initial probability to zero
       float probability = ZERO;
 
+      // If element exists in RandBox
       if (this.map.containsKey(elem)) {
+         // Find probability of element
          probability = ((float) this.map.get(elem).intValue() * HUNDRED) /
                        ((float) this.size());
       }
@@ -154,15 +192,24 @@ public class RandBox {
     * @return String of randomly picked element
     */
    public String pick () {
+      // Initialize chosen element variable to empty String
       String chosenElem = EMPTY;
+
+      // New Random object
       Random rand = new Random();
 
+      // Choose random integer
       int choice = rand.nextInt(this.size()) + INIT;
 
+      // Loop through each element
       Set<Map.Entry<String, Integer>> set = map.entrySet();
       for (Map.Entry<String, Integer> elem: set) {
          int elemValue = elem.getValue().intValue();
+
+         // Subtract from random integer as RandBox is iterated
          choice -= elemValue;
+
+         // If random integer becomes zero, return current element
          if (choice <= ZERO) {
             chosenElem = elem.getKey();
             break;
@@ -178,8 +225,15 @@ public class RandBox {
     * @return List containing Strings of all randomly picked elements
     */
    public List<String> pickMult (int amount) {
+      // Create initial list of random integers
       List<String> choiceList = new ArrayList<>();
+
+      // If invalid amount
+      if (amount < 1) return choiceList;
+
+      // Pick random integers for amount specified
       for (int i = ZERO; i < amount; i++) {
+         // Add random integer to list
          choiceList.add(this.pick());
       }
       return choiceList;
