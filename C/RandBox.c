@@ -9,14 +9,16 @@
 /**
  * Struct containing RandBox contents
  */
-struct _RandBox {
+struct _RandBox
+{
    Element *first;
 };
 
 /**
 * Struct containing RandBox elements
 */
-struct _Element {
+struct _Element
+{
    char *name;
    int amount;
    Element *next;
@@ -29,7 +31,8 @@ struct _Element {
  * @param rb: Reference to RandBox
  * @return If RandBox is empty
  */
-static bool randbox_is_empty (RandBox **rb) {
+static bool randbox_is_empty (RandBox **rb)
+{
    return (*rb)->first == NULL;
 }
 
@@ -55,6 +58,7 @@ static bool randbox_find (Element **curr, char *query)
  * Initializes values in RandBox
  *
  * @param rb: Reference to RandBox
+ * @return
  */
 void randbox_init (RandBox **rb)
 {
@@ -88,6 +92,7 @@ int randbox_size (RandBox **rb)
  * @param rb: Reference to RandBox
  * @param name: String containing new element to be added
  * @param amount: Amount of elements to be added
+ * @return
  */
 void randbox_add (RandBox **rb, char *name, int amount)
 {
@@ -124,9 +129,10 @@ void randbox_add (RandBox **rb, char *name, int amount)
  * @param rb: Reference to RandBox
  * @param name: Name of element to delete
  * @param amount: Amount of elements to be deleted
- * @return Success or failure
+ * @return
  */
-void randbox_delete (RandBox **rb, char *name, int amount) {
+void randbox_delete (RandBox **rb, char *name, int amount)
+{
    // If RandBox is empty, or amount given or name given are invalid
    if (randbox_is_empty(rb) || amount < 1 || name == NULL) return;
 
@@ -159,8 +165,10 @@ void randbox_delete (RandBox **rb, char *name, int amount) {
  * Deletes all elements from RandBox
  *
  * @param rb: Reference to RandBox
+ * @return
  */
-void randbox_delete_all (RandBox **rb) {
+void randbox_delete_all (RandBox **rb)
+{
    // If RandBox is empty
    if (randbox_is_empty(rb)) return;
 
@@ -187,7 +195,8 @@ void randbox_delete_all (RandBox **rb) {
  * @param name: Name of element to find probability of
  * @return Float containing probability of element
  */
-float randbox_probability (RandBox **rb, char *name) {
+float randbox_probability (RandBox **rb, char *name)
+{
    // If RandBox is empty
    if (randbox_is_empty(rb)) return 0;
 
@@ -217,6 +226,9 @@ static bool init_rand = false;
  */
 char *randbox_pick (RandBox **rb)
 {
+   // If RandBox is empty
+   if (randbox_is_empty(rb)) return "FAILED";
+
    // If rand() in not initialized
    if (! init_rand)
    {
@@ -246,16 +258,18 @@ char *randbox_pick (RandBox **rb)
  * Chooses multiple random elements from RandBox
  *
  * @param rb: Reference to RandBox
- * @param choice_list: Array of elements chosen from RandBox
+ * @param choice_list: Reference to array of elements chosen from RandBox
  * @param amount: Amount of elements to be picked
- * @return Success or failure
- *
-int randbox_mult_pick (RandBox **rb, char ***choice_list, int amount)
+ * @return
+ */
+void randbox_mult_pick (RandBox **rb, char ***choice_list, int amount)
 {
-   int result = 0;
+   *choice_list = malloc(sizeof(char*) * amount);
 
    // Loop through pick function 
-   for (int i = 0; i < amount; i++) result += pick_randbox_elem(rb, choice_list[i]);
-   return result;
+   for (int i = 0; i < amount; i++)
+   {
+      (*choice_list)[i] = malloc(sizeof(char) * 100);
+      strcpy((*choice_list)[i], randbox_pick(rb));
+   }
 }
-*/

@@ -17,6 +17,7 @@ typedef struct _Element Element;
  * Initializes values in RandBox
  *
  * @param rb: Reference to RandBox
+ * @return
  */
 void randbox_init (RandBox **rb);
 
@@ -34,7 +35,7 @@ int randbox_size (RandBox **rb);
  * @param rb: Reference to RandBox
  * @param name: String containing new element to be added
  * @param amount: Amount of elements to be added
- * @return Success or failure
+ * @return
  */
 void randbox_add (RandBox **rb, char *name, int amount);
 
@@ -44,7 +45,7 @@ void randbox_add (RandBox **rb, char *name, int amount);
  * @param rb: Reference to RandBox
  * @param name: Name of element to delete
  * @param amount: Amount of elements to be added
- * @return Success or failure
+ * @return
  */
 void randbox_delete (RandBox **rb, char *name, int amount);
 
@@ -52,6 +53,7 @@ void randbox_delete (RandBox **rb, char *name, int amount);
  * Deletes all elements from RandBox
  *
  * @param rb: Reference to RandBox
+ * @return
  */
 void randbox_delete_all (RandBox **rb);
 
@@ -76,10 +78,10 @@ char *randbox_pick (RandBox **rb);
  * Chooses multiple random elements from RandBox
  *
  * @param rb: Reference to RandBox
- * @param choice_list: Array of elements chosen from RandBox
+ * @param choice_list: Reference to array of elements chosen from RandBox
  * @param amount: Amount of elements to be picked
- * @return Success or failure
- *
-int randbox_mult_pick (RandBox **rb, char ***choice_list, int amount);
-*/
+ * @return
+ */
+void randbox_mult_pick (RandBox **rb, char ***choice_list, int amount);
+
 #endif

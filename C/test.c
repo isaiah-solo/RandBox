@@ -3,8 +3,10 @@
 
 #include "RandBox.h"
 
-int main (char** argv, int argc) {
+int main (char** argv, int argc)
+{
    RandBox *rb;
+   char **multpick;
    
    randbox_init(&rb);
    
@@ -14,8 +16,14 @@ int main (char** argv, int argc) {
    printf("Red = %f\n", randbox_probability(&rb, "red"));
    printf("Blue = %f\n", randbox_probability(&rb, "blue"));
    
-   printf("Random string: %s\n", randbox_pick(&rb));
+   printf("Random strings:\n");
    
+   randbox_mult_pick(&rb, &multpick, 10);
+   
+   for (int i; i < 10; i++) {
+      printf("%s\n", multpick[i]);
+   }
+
    randbox_delete_all(&rb);
    
    /*
