@@ -1,5 +1,0 @@
-#!/bin/bash
-
-gcc *.c *.h -o test
-./test
-rm test

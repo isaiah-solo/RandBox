@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "RandBox.h"
+#include "../RandBox.h"
 
 int main (char** argv, int argc)
 {

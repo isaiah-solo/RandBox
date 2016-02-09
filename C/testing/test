@@ -1,0 +1,5 @@
+#!/bin/bash
+
+gcc *.c ../*.c ../*.h -o exe
+./exe
+rm exe
