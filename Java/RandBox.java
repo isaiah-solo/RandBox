@@ -8,24 +8,18 @@ import java.util.*;
 public class RandBox {
 
    /**
-    * Maximum percentage constant
+    * Constants
     */
-   private final static int MAX = 100;
-
-   /**
-    * Minimum percentage constant
-    */
-   private final static int MIN = 1;
+   private final static int ZERO = 0;
+   private final static int INCREMENT = 1;
+   private final static String EMPTY = "";
+   private final static int HUNDRED = 100;
+   private final static int INIT = 1;
 
    /**
     * HashMap containing elements in RandBox
     */
    private HashMap<String, Integer> map;
-
-   /**
-    * Int containing size of RandBox
-    */
-   private int size = 0;
 
    /**
     * Default class constructor
@@ -42,16 +36,25 @@ public class RandBox {
    public RandBox (List<String> list) {
       this.map = new HashMap<>();
       for (String elem: list) {
-         Integer check = this.map.get(elem);
-         if (check == null) {
-            Integer init = new Integer(MIN);
+         if (this.map.get(elem) == null) {
+            Integer init = new Integer(INIT);
             this.map.put(elem, init);
          }
          else {
-            check += 1;
+            int prevInt = this.map.get(elem).intValue();
+            int newInt = prevInt + INCREMENT;
+            this.map.put(elem, new Integer(newInt));
          }
-         this.size++;
       }
+   }
+
+   /**
+    * Returns number of elements in RandBox
+    *
+    * @return Integer containing amount of elements in RandBox
+    */
+   public int size () {
+      return this.map.size();
    }
 
    /**
@@ -71,7 +74,6 @@ public class RandBox {
       else {
          this.map.put(newElem, new Integer(amount));
       }
-      this.size += amount;
    }
    
    /**
@@ -80,13 +82,18 @@ public class RandBox {
     * Deletes nothing if element does not exist
     *
     * @param elem: String containing element to be deleted
+    * @param amount: amount of 'newElem' to be deleted
     * @return
     */
-   public void delete (String elem) {
-      if (this.map.containsKey(elem)) {
-         this.map.remove(elem);
-         this.size--;
-      }
+   public void delete (String elem, int amount) {
+      if (! this.map.containsKey(elem)) return;
+
+      int prevInt = this.map.get(elem).intValue();
+      int newInt = prevInt - amount;
+
+      if (prevInt < amount) return;
+      else if (prevInt < amount) this.map.remove(elem);
+      else this.map.put(elem, new Integer(newInt));
    }
 
    /**
@@ -99,27 +106,19 @@ public class RandBox {
    }
 
    /**
-    * Returns number of elements in RandBox
-    *
-    * @return Size of RandBox
-    */
-   public int size() {
-      return this.size;
-   }
-
-   /**
     * Returns probability of specified element
     *
     * @param elem: String of element to check probability of
     * @return Float containing probability of element
     * @return Nothing if element doesnt exist
     */
-   public float chanceOf (String elem) {
-      float percent = MIN;
+   public float probability (String elem) {
+      float probability = ZERO;
       if (this.map.containsKey(elem)) {
-         percent = ((float) this.map.get(elem) * 100) / ((float) MAX);
+         probability = ((float) this.map.get(elem) * HUNDRED) /
+                       ((float) this.size());
       }
-      return percent;
+      return probability;
    }
 
    /**
@@ -127,17 +126,24 @@ public class RandBox {
     *
     * @return String of randomly picked element
     */
-   public String pickRand () {
-      String chosenElem = "";
-
+   public String pick () {
+      String chosenElem = EMPTY;
       Random rand = new Random();
-      int choice = rand.nextInt(this.size) + 1;
+
+      int size = ZERO;
+      Integer[] values = this.map.values().toArray(new Integer[ZERO]);
+
+      for (Integer value: values) {
+         size += value.intValue();
+      }
+
+      int choice = rand.nextInt(size) + INCREMENT;
 
       Set<Map.Entry<String, Integer>> set = map.entrySet();
       for (Map.Entry<String, Integer> elem: set) {
          int elemValue = elem.getValue().intValue();
          choice -= elemValue;
-         if (choice <= 0) {
+         if (choice <= ZERO) {
             chosenElem = elem.getKey();
             break;
          }
@@ -151,10 +157,10 @@ public class RandBox {
     * @param amount: Amount of random elements to be picked
     * @return List containing Strings of all randomly picked elements
     */
-   public List<String> pickMultRand (int amount) {
+   public List<String> pickMult (int amount) {
       List<String> choiceList = new ArrayList<>();
-      for (int i = 0; i < amount; i++) {
-         choiceList.add(this.pickRand());
+      for (int i = ZERO; i < amount; i++) {
+         choiceList.add(this.pick());
       }
       return choiceList;
    }

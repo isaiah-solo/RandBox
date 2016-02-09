@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class test {
+public class example {
    public static void main (String[] args) {
       RandBox rand = new RandBox();
       rand.add("red", 3);
@@ -10,7 +10,7 @@ public class test {
 
       int green = 0, red = 0, blue = 0, purple = 0;
 
-      List<String> list = rand.pickMultRand(20);
+      List<String> list = rand.pickMult(20);
       for (String elem: list) {
          if (elem.equals("red")) red++;
          if (elem.equals("blue")) blue++;
