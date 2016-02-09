@@ -7,91 +7,115 @@
 #include "RandBox.h"
 
 /**
+ * Struct containing RandBox contents
+ */
+struct _RandBox {
+   Element *first;
+};
+
+/**
+* Struct containing RandBox elements
+*/
+struct _Element {
+   char *name;
+   int amount;
+   Element *next;
+   Element *prev;
+};
+
+/**
+ * Helper function to check if RandBox is empty
+ * 
+ * @param rb: Reference to RandBox
+ * @return If RandBox is empty
+ */
+static bool randbox_is_empty (RandBox **rb) {
+   return (*rb)->first == NULL;
+}
+
+/**
  * Helper function to find specific element in RandBox
  *
  * @param curr: Reference to current element
  * @param query: String containing name to search
  * @return If element found or not found
  */
-static int find_elem(Element *curr, char *query)
+static bool randbox_find (Element **curr, char *query)
 {
    // Loop through RandBox
-   while (curr->next != NULL)
+   for (; *curr != NULL; *curr = (*curr)->next)
    {
       // If element found
-      if (strcmp(curr->name, query) == 0) break;
-      curr = curr->next;
+      if (strcmp((*curr)->name, query) == 0) return true;
    }
-
-   // If current element or last element matches query
-   if (strcmp(curr->name, query) == 0) return 0;
-   return 1;
+   return false;
 }
 
 /**
  * Initializes values in RandBox
  *
  * @param rb: Reference to RandBox
- * @return Success or failure
  */
-int init_randbox (RandBox *rb)
+void randbox_init (RandBox **rb)
 {
-   // Set initial size to zero
-   rb->size = 0;
-   return 0;
+   // Initialize memory
+   *rb = (RandBox *) malloc(sizeof(RandBox));
+   (*rb)->first = NULL;
+}
+
+/**
+ * Returns number of elements in RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @return Integer containing amount of elements in RandBox
+ */
+int randbox_size (RandBox **rb)
+{
+   int size = 0;
+
+   // Loop through RandBox
+   for (Element *curr = (*rb)->first; curr != NULL; curr = curr->next)
+   {
+      // Add amount of each element
+      size += curr->amount;
+   }
+   return size;
 }
 
 /**
  * Adds one or more elements to the RandBox
  *
  * @param rb: Reference to RandBox
- * @param new_name: String containing new element to be added
- * @param new_amount: amount of elements to be added
- * @return Success or failure
+ * @param name: String containing new element to be added
+ * @param amount: amount of elements to be added
  */
-int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
+void randbox_add (RandBox **rb, char *name, int amount)
 {
-   // If amount given is invalid
-   if (new_amount < 1) return 1;
+   // If amount given or name given are invalid
+   if (amount < 1 || name == NULL) return;
 
-   // If RandBox is Empty
-   if (rb->first == NULL)
+   // Create RandBox element
+   Element *temp = (Element *) malloc(sizeof(Element));
+   temp->name = malloc(sizeof(char) * 100);
+   strcpy(temp->name, name);
+   temp->amount = amount;
+   temp->next = NULL;
+   temp->prev = NULL;
+   
+   // Point to first element
+   Element *curr = (*rb)->first;
+
+   // If element not found
+   if (! randbox_find(&curr, name))
    {
-      // Create first RandBox element
-      Element *curr = (Element *) malloc(sizeof(Element));
-      curr->name = new_name;
-      curr->amount = new_amount;
-
-      // Point first to current
-      rb->first = curr;
+      // Append new element to beginning
+      if (! randbox_is_empty(rb)) (*rb)->first->prev = temp;
+      temp->next = (*rb)->first;
+      (*rb)->first = temp;
    }
 
-   // If RandBox is not empty
-   else
-   {
-      // Point to first element
-      Element *curr = rb->first;
-
-      // Search for element in RandBox
-      int result = find_elem(curr, new_name);
-
-      // If element not found
-      if (result == 1)
-      {
-         // Append new element to end of RandBox
-         Element *temp = (Element *) malloc(sizeof(Element));
-         temp->name = new_name;
-         temp->amount = new_amount;
-         curr->next = temp;
-      }
-
-      // If element found
-      else curr->amount += new_amount;
-   }
-
-   // Increase size
-   rb->size += new_amount;
-   return 0;
+   // Else if element found
+   else curr->amount += amount;
 }
 
 /**
@@ -101,84 +125,82 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount)
  * @param name: Name of element to delete
  * @return Success or failure
  */
-int delete_randbox_elem (RandBox *rb, char *name) {
-   // If RandBox is empty
-   if (rb->first == NULL || rb->size == 0) return 1;
+void randbox_delete (RandBox **rb, char *name, int amount) {
+   // If RandBox is empty, or amount given or name given are invalid
+   if (randbox_is_empty(rb) || amount < 1 || name == NULL) return;
 
    // Point to first element
-   Element *curr = rb->first;
-
-   // Search for element in RandBox
-   int result = find_elem(curr, name);
+   Element *curr = (*rb)->first;
 
    // If element not found
-   if (result == 1) return result;
+   if (! randbox_find(&curr, name)) return;
 
-   // If element found
-   else
+   // If amount to delete exceeds amount of element
+   if (amount > curr->amount) return;
+
+   // Else if amount to delete is equal to amount of element
+   else if (amount == curr->amount)
    {
-      // If current is not pointing to the first element
-      if (curr != rb->first)
-      {
-         // Attach current's previous with next
-         Element *prev = rb->first;
-         Element *next = curr->next;
-         while (prev->next != curr) prev = prev->next;
-         prev->next = next;
-      }
+      // Connect current pointer's previous and next
+      if (curr->next != NULL) curr->next->prev = curr->prev;
+      if (curr->prev != NULL) curr->prev->next = curr->next;
+      else (*rb)->first = curr->next;
 
-      // If current is pointing to the first element
-      else rb->first = rb->first->next;
+      // Free allocated memory
+      free(curr);
    }
 
-   // Free allocated memory
-   free(curr->name);
-   free(curr);
-   return 0;
+   // Else if amount to delete is less than amount of element
+   else curr->amount -= amount;
 }
 
 /**
  * Deletes all elements from RandBox
  *
  * @param rb: Reference to RandBox
- * @return Success or failure
  */
-int delete_randbox_all (RandBox *rb) {
+void randbox_delete_all (RandBox **rb) {
    // If RandBox is empty
-   if (rb->first == NULL) return 1;
+   if (randbox_is_empty(rb)) return;
 
    // Point to first element
-   Element *curr = rb->first;
+   Element *curr = (*rb)->first;
 
    // Loop through each element
    while (curr != NULL) {
       // Create temporary pointer
       Element *temp = curr;
 
-      // Delete the first element as it goes along
+      // Iterate current
       curr = curr->next;
-      free(temp);
+
+      // Free temporary pointer
+      randbox_delete(rb, temp->name, temp->amount);
    }
-   return 0;
 }
 
 /**
- * Returns number of elements in RandBox
+ * Returns probability of specified element
  *
  * @param rb: Reference to RandBox
- * @param size: Integer containing amount of elements in RandBox
+ * @param percent: Reference to float containing probability of element
  * @return Success or failure
- */
-int size_randbox (RandBox *rb, int *size)
-{
-   // Copy size of RandBox to reference integer
-   *size = rb->size;
+ *
+int randbox_chance_of (RandBox **rb, float **percent, char *name) {
+   if (rb->first == NULL) return 1;
+   percent = malloc(sizeof(float));
+   Element *curr = rb->first;
+   int result = find_elem(curr, name);
+   if (result == 1) return 1;
+   float quotient = ((float)((curr->amount) * 100)) / ((float) rb->size);
+   *percent = quotient;
+   printf("percent: %f\n", *percent);
    return 0;
 }
 
 /**
  * Static variable that tells if rand() is initialized
- */
+ *
 static bool init_rand = false;
 
 /**
@@ -187,8 +209,8 @@ static bool init_rand = false;
  * @param rb: Reference to RandBox
  * @param elem: Element to be chosen from RandBox
  * @return Success or failure
- */
-int pick_randbox_elem (RandBox *rb, char *elem)
+ *
+int randbox_pick (RandBox **rb, char **elem)
 {
    // If rand() in not initialized
    if (! init_rand)
@@ -231,8 +253,8 @@ int pick_randbox_elem (RandBox *rb, char *elem)
  * @param choice_list: Array of elements chosen from RandBox
  * @param amount: Amount of elements to be picked
  * @return Success or failure
- */
-int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount)
+ *
+int randbox_mult_pick (RandBox **rb, char ***choice_list, int amount)
 {
    int result = 0;
 
@@ -240,3 +262,4 @@ int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount)
    for (int i = 0; i < amount; i++) result += pick_randbox_elem(rb, choice_list[i]);
    return result;
 }
+*/

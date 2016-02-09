@@ -14,39 +14,29 @@ typedef struct _RandBox RandBox;
 typedef struct _Element Element;
 
 /**
- * Struct containing RandBox contents
- */
-struct _RandBox {
-   Element *first;
-   int size;
-};
-
-/**
-* Struct containing RandBox elements
-*/
-struct _Element {
-   char *name;
-   int amount;
-   Element *next;
-};
-
-/**
  * Initializes values in RandBox
  *
  * @param rb: Reference to RandBox
- * @return Success or failure
  */
-int init_randbox (RandBox *rb); 
+void randbox_init (RandBox **rb);
+
+/**
+ * Returns number of elements in RandBox
+ *
+ * @param rb: Reference to RandBox
+ * @return Integer containing amount of elements in RandBox
+ */
+int randbox_size (RandBox **rb);
 
 /**
  * Adds one or more elements to the RandBox
  *
  * @param rb: Reference to RandBox
- * @param new_name: String containing new element to be added
- * @param new_amount: amount of elements to be added
+ * @param name: String containing new element to be added
+ * @param amount: amount of elements to be added
  * @return Success or failure
  */
-int add_randbox_elem (RandBox *rb, char *new_name, int new_amount);
+void randbox_add (RandBox **rb, char *name, int amount);
 
 /**
  * Deletes specified element from RandBox
@@ -55,24 +45,23 @@ int add_randbox_elem (RandBox *rb, char *new_name, int new_amount);
  * @param name: Name of element to delete
  * @return Success or failure
  */
-int delete_randbox_elem (RandBox *rb, char *name);
+void randbox_delete (RandBox **rb, char *name, int amount);
 
 /**
  * Deletes all elements from RandBox
  *
  * @param rb: Reference to RandBox
- * @return Success or failure
  */
-int delete_randbox_all (RandBox *rb);
+void randbox_delete_all (RandBox **rb);
 
 /**
- * Returns number of elements in RandBox
+ * Returns probability of specified element
  *
  * @param rb: Reference to RandBox
- * @param size: Integer containing amount of elements in RandBox
+ * @param percent: Reference to float containing probability of element
  * @return Success or failure
- */
-int size_randbox (RandBox *rb, int *size);
+ *
+int randbox_chance_of (RandBox **rb, float **percent, char *name);
 
 /**
  * Chooses random element from RandBox
@@ -80,8 +69,8 @@ int size_randbox (RandBox *rb, int *size);
  * @param rb: Reference to RandBox
  * @param elem: Element to be chosen from RandBox
  * @return Success or failure
- */
-int pick_randbox_elem (RandBox *rb, char *elem);
+ *
+int randbox_pick (RandBox **rb, char **elem);
 
 /**
  * Chooses multiple random elements from RandBox
@@ -90,7 +79,7 @@ int pick_randbox_elem (RandBox *rb, char *elem);
  * @param choice_list: Array of elements chosen from RandBox
  * @param amount: Amount of elements to be picked
  * @return Success or failure
- */
-int pick_randbox_elem_mult (RandBox *rb, char** choice_list, int amount);
-
+ *
+int randbox_mult_pick (RandBox **rb, char ***choice_list, int amount);
+*/
 #endif
