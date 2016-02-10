@@ -31,7 +31,7 @@ public class example {
       System.out.println(rb.pick() + "\n");
       
       // Pick multiple random elements from RandBox
-      List<String> list = rb.pickMult(20);
+      List<String> list = rb.multPick(20);
       
       for (String elem: list) {
          if (elem.equals("red")) red++;

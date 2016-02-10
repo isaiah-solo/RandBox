@@ -224,7 +224,7 @@ public class RandBox {
     * @param amount: Amount of random elements to be picked
     * @return List containing Strings of all randomly picked elements
     */
-   public List<String> pickMult (int amount) {
+   public List<String> multPick (int amount) {
       // Create initial list of random integers
       List<String> choiceList = new ArrayList<>();
 
