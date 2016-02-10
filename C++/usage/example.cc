@@ -1,7 +1,5 @@
-#include <cstdlib>
-#include <cstdio>
-#include <string>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "../RandBox.h"
@@ -11,49 +9,40 @@ using namespace std;
 int main (int argc, char** argv)
 {
    // Variables to declare, RandBox takes care of memory allocation
-   RandBox *rb;
-   char **multpick;
-   string red_str = "red";
-   string blue_str = "blue";
-   vector<char> red(red_str.begin(), red_str.end()); red.push_back('\0');
-   vector<char> blue(blue_str.begin(), blue_str.end()); blue.push_back('\0');
-   
-   // Initialize RandBox
-   randbox_init(&rb);
+   RandBox rb;
+   string red("red");
+   string blue("blue");
    
    // Add elements to RandBox
-   randbox_add(&rb, &*red.begin(), 2);
-   randbox_add(&rb, &*blue.begin(), 9);
+   rb.add(red, 2);
+   rb.add(blue, 9);
 
    // Delete elements from RandBox
-   randbox_delete(&rb, &*blue.begin(), 2);
+   rb.del(blue, 2);
    
    // Displaying probability of selected elements from RandBox
-   printf("Red = %f\n", randbox_probability(&rb, &*red.begin()));
-   printf("Blue = %f\n\n", randbox_probability(&rb, &*blue.begin()));
+   cout << "Red = " << rb.probability(red) << endl;
+   cout << "Blue = " << rb.probability(blue) << endl << endl;
 
    // Displaying size of RandBox
-   printf("Size = %d\n\n", randbox_size(&rb));
+   cout << "Size = " << rb.size() << endl << endl;
    
    // Random pick from RandBox
-   printf("Random 1 string:\n");
+   cout << "Random 1 string:" << endl;
 
-   printf("%s\n\n", randbox_pick(&rb));
+   cout << rb.pick() << endl << endl;
 
    // Multiple random picks from RandBox
-   printf("Random 10 strings:\n");
+   cout << "Random 10 strings:" << endl;
   
-   randbox_mult_pick(&rb, &multpick, 10);
+   auto multpick = rb.mult_pick(10);
    
-   for (int i; i < 10; i++) {
-      printf("%s\n", multpick[i]);
+   for (auto itor = multpick.begin(); itor != multpick.end(); ++itor) {
+      cout << *itor << endl;
    }
 
    // Delete all elements from RandBox
-   randbox_delete_all(&rb);
-
-   // Finally, free RandBox
-   free(rb);
+   rb.del_all();
 
    return 0;
 }

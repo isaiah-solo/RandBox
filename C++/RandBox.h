@@ -1,87 +1,104 @@
-/**
- * RANDBOX: C Version
- *
- * Created by isayyuhh on 2/7/2016
- */
-
 #ifndef _RANDBOX_
 #define _RANDBOX_
 
-/**
- * Struct declarations
- */
-typedef struct _RandBox RandBox;
-typedef struct _Element Element;
+#include <string>
+#include <vector>
+
+using namespace std;
+using Element = pair<string, int>;
+using Elements = vector<Element>;
+using Itor = Elements::iterator;
 
 /**
- * Initializes values in RandBox
+ * RANDBOX: C++ Version
  *
- * @param rb: Reference to RandBox
- * @return
+ * Created by isayyuhh on 2/9/2016
  */
-void randbox_init (RandBox **rb);
 
-/**
- * Returns number of elements in RandBox
- *
- * @param rb: Reference to RandBox
- * @return Integer containing amount of elements in RandBox
- */
-int randbox_size (RandBox **rb);
+class RandBox
+{
+   private:
+   
+      /**
+       * Vector of element pairs
+       */
+      Elements elements;
 
-/**
- * Adds one or more elements to the RandBox
- *
- * @param rb: Reference to RandBox
- * @param name: String containing new element to be added
- * @param amount: Amount of elements to be added
- * @return
- */
-void randbox_add (RandBox **rb, char *name, int amount);
+      /**
+       * Helper function to check if RandBox is empty
+       *
+       * @return If RandBox is empty
+       */
+      bool is_empty ();
 
-/**
- * Deletes specified element from RandBox
- *
- * @param rb: Reference to RandBox
- * @param name: Name of element to delete
- * @param amount: Amount of elements to be added
- * @return
- */
-void randbox_delete (RandBox **rb, char *name, int amount);
+      /**
+       * Helper function to find specific element in RandBox
+       *
+       * @param query: String containing name to search
+       * @return Iterator pointing to current element
+       */
+      Itor find (string query);
+      
+   public:
+   
+      /**
+       * Default constructor
+       */
+      RandBox();
 
-/**
- * Deletes all elements from RandBox
- *
- * @param rb: Reference to RandBox
- * @return
- */
-void randbox_delete_all (RandBox **rb);
+      /**
+       * Returns number of elements in RandBox
+       *
+       * @return Integer containing amount of elements in RandBox
+       */
+      int size ();
 
-/**
- * Returns probability of specified element
- *
- * @param rb: Reference to RandBox
- * @param name: Name of element to find probability of
- * @return Float containing probability of element
- */
-float randbox_probability (RandBox **rb, char *name);
+      /**
+       * Adds one or more elements to the RandBox
+       *
+       * @param name: String containing new element to be added
+       * @param amount: Amount of elements to be added
+       * @return
+       */
+      void add (string name, int amount);
 
-/**
- * Chooses random element from RandBox
- *
- * @param rb: Reference to RandBox
- * @return Element to be chosen from RandBox
- */
-char *randbox_pick (RandBox **rb);
+      /**
+       * Deletes specified element from RandBox
+       *
+       * @param name: Name of element to delete
+       * @param amount: Amount of elements to be added
+       * @return
+       */
+      void del (string name, int amount);
 
-/**
- * Chooses multiple random elements from RandBox
- *
- * @param rb: Reference to RandBox
- * @param choice_list: Reference to array of elements chosen from RandBox
- * @param amount: Amount of elements to be picked
- * @return
- */
-void randbox_mult_pick (RandBox **rb, char ***choice_list, int amount);
+      /**
+       * Deletes all elements from RandBox
+       *
+       * @return
+       */
+      void del_all ();
 
+      /**
+       * Returns probability of specified element
+       *
+       * @param name: Name of element to find probability of
+       * @return Float containing probability of element
+       */
+      float probability (string name);
+
+      /**
+       * Chooses random element from RandBox
+       *
+       * @return Element to be chosen from RandBox
+       */
+      string pick ();
+
+      /**
+       * Chooses multiple random elements from RandBox
+       *
+       * @param amount: Amount of elements to be picked
+       * @return vector of random elements from RandBox
+       */
+      vector<string> mult_pick (int amount);
+};
 #endif

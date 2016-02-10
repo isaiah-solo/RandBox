@@ -1,103 +1,59 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <cstdbool>
-#include <string>
-#include <iostream>
-#include <vector>
-
 #include "RandBox.h"
 
 using namespace std;
 
 /**
- * RANDBOX: C Version
+ * RANDBOX: C++ Version
  *
- * Created by isayyuhh on 2/7/2016
+ * Created by isayyuhh on 2/9/2016
  */
 
-/**
- * Struct containing RandBox contents
- */
-struct _RandBox
-{
-   Element *first;
-};
-
-/**
-* Struct containing RandBox elements
-*/
-struct _Element
-{
-   char *name;
-   int amount;
-   Element *next;
-   Element *prev;
-};
-
-/**
-* Constant containing a string signifying failure
-*/
-const char *failed = "FAILED";
+RandBox::RandBox(): elements{} {}
 
 /**
  * Helper function to check if RandBox is empty
  * 
- * @param rb: Reference to RandBox
  * @return If RandBox is empty
  */
-static bool randbox_is_empty (RandBox **rb)
+bool RandBox::is_empty ()
 {
-   return (*rb)->first == NULL;
+   return this->elements.empty();
 }
 
 /**
  * Helper function to find specific element in RandBox
  *
- * @param curr: Reference to current element
  * @param query: String containing name to search
- * @return If element found or not found
+ * @return Iterator pointing to current element
  */
-static bool randbox_find (Element **curr, char *query)
+Itor RandBox::find (string query)
 {
+   auto itor = this->elements.begin();
+
    // Loop through RandBox
-   for (; *curr != NULL; *curr = (*curr)->next)
+   for (; itor != this->elements.end(); ++itor)
    {
       // If element found
-      if (strcmp((*curr)->name, query) == 0) return true;
+      if (query.compare(itor->first) == 0) break;
    }
-   return false;
-}
-
-/**
- * Initializes values in RandBox
- *
- * @param rb: Reference to RandBox
- * @return
- */
-void randbox_init (RandBox **rb)
-{
-   // Initialize memory
-   *rb = (RandBox *) malloc(sizeof(RandBox));
-   (*rb)->first = NULL;
+   return itor;
 }
 
 /**
  * Returns number of elements in RandBox
  *
- * @param rb: Reference to RandBox
  * @return Integer containing amount of elements in RandBox
  */
-int randbox_size (RandBox **rb)
+int RandBox::size ()
 {
    int size = 0;
 
    // Loop through RandBox
-   for (Element *curr = (*rb)->first; curr != NULL; curr = curr->next)
+   for (auto itor = this->elements.begin(); itor != this->elements.end();
+        ++itor)
    {
       // Add amount of each element
-      size += curr->amount;
+      size += itor->second;
    }
    return size;
 }
@@ -105,127 +61,89 @@ int randbox_size (RandBox **rb)
 /**
  * Adds one or more elements to the RandBox
  *
- * @param rb: Reference to RandBox
  * @param name: String containing new element to be added
  * @param amount: Amount of elements to be added
  * @return
  */
-void randbox_add (RandBox **rb, char *name, int amount)
+void RandBox::add (string name, int amount)
 {
    // If amount given or name given are invalid
-   if (amount < 1 || name == NULL) return;
+   if (amount < 1 || name.empty()) return;
 
    // Create RandBox element
-   Element *temp = (Element *) malloc(sizeof(Element));
-   temp->name = (char *) malloc(sizeof(char) * 100);
-   strcpy(temp->name, name);
-   temp->amount = amount;
-   temp->next = NULL;
-   temp->prev = NULL;
+   Element temp(name, amount);
    
-   // Point to first element
-   Element *curr = (*rb)->first;
+   // Find element
+   auto itor = this->find(name);
 
    // If element not found
-   if (! randbox_find(&curr, name))
-   {
-      // Append new element to beginning
-      if (! randbox_is_empty(rb)) (*rb)->first->prev = temp;
-      temp->next = (*rb)->first;
-      (*rb)->first = temp;
-   }
+   if (itor == this->elements.end()) this->elements.push_back(temp);
 
    // Else if element found
-   else curr->amount += amount;
+   else itor->second += amount;
 }
 
 /**
  * Deletes specified element from RandBox
  *
- * @param rb: Reference to RandBox
  * @param name: Name of element to delete
  * @param amount: Amount of elements to be deleted
  * @return
  */
-void randbox_delete (RandBox **rb, char *name, int amount)
+void RandBox::del (string name, int amount)
 {
    // If RandBox is empty, or amount given or name given are invalid
-   if (randbox_is_empty(rb) || amount < 1 || name == NULL) return;
+   if (this->is_empty() || amount < 1 || name.empty()) return;
 
-   // Point to first element
-   Element *curr = (*rb)->first;
+   // Find element
+   auto itor = this->find(name);
 
    // If element not found
-   if (! randbox_find(&curr, name)) return;
+   if (itor == this->elements.end()) return;
 
    // If amount to delete exceeds amount of element
-   if (amount > curr->amount) return;
+   if (amount > itor->second) return;
 
    // Else if amount to delete is equal to amount of element
-   else if (amount == curr->amount)
-   {
-      // Connect current pointer's previous and next
-      if (curr->next != NULL) curr->next->prev = curr->prev;
-      if (curr->prev != NULL) curr->prev->next = curr->next;
-      else (*rb)->first = curr->next;
-
-      // Free allocated memory
-      free(curr);
-   }
+   else if (amount == itor->second) this->elements.erase(itor);
 
    // Else if amount to delete is less than amount of element
-   else curr->amount -= amount;
+   else itor->second -= amount;
 }
 
 /**
  * Deletes all elements from RandBox
  *
- * @param rb: Reference to RandBox
  * @return
  */
-void randbox_delete_all (RandBox **rb)
+void RandBox::del_all ()
 {
-   // If RandBox is empty
-   if (randbox_is_empty(rb)) return;
-
-   // Point to first element
-   Element *curr = (*rb)->first;
-
-   // Loop through each element
-   while (curr != NULL) {
-      // Create temporary pointer
-      Element *temp = curr;
-
-      // Iterate current
-      curr = curr->next;
-
-      // Free temporary pointer
-      randbox_delete(rb, temp->name, temp->amount);
-   }
+   this->elements.clear();
 }
 
 /**
  * Returns probability of specified element
  *
- * @param rb: Reference to RandBox
  * @param name: Name of element to find probability of
  * @return Float containing probability of element
  */
-float randbox_probability (RandBox **rb, char *name)
+float RandBox::probability (string name)
 {
    // If RandBox is empty
-   if (randbox_is_empty(rb)) return 0;
+   if (this->is_empty()) return 0;
 
    float probability = 0;
 
-   // Point to first element
-   Element *curr = (*rb)->first;
+   // Find element
+   auto itor = this->find(name);
 
-   // If element not found
-   if (! randbox_find(&curr, name)) return 0;
-
-   // Find probability
-   probability = ((float)((curr->amount) * 100)) / ((float) randbox_size(rb));
+   // If element found
+   if (itor != this->elements.end())
+   {
+      // Find probability
+      probability = ((float)((itor->second) * 100)) /
+                    ((float) this->size());
+   }
    return probability;
 }
 
@@ -237,16 +155,14 @@ static bool init_rand = false;
 /**
  * Chooses random element from RandBox
  *
- * @param rb: Reference to RandBox
  * @return Element to be chosen from RandBox
  */
-char *randbox_pick (RandBox **rb)
+string RandBox::pick ()
 {
-   string f_str = "FAILED";
-   vector<char> failed(f_str.begin(), f_str.end()); failed.push_back('\0');
+   string failed = "FAILED";
    
    // If RandBox is empty
-   if (randbox_is_empty(rb)) return &*failed.begin();
+   if (this->is_empty()) return failed;
 
    // If rand() in not initialized
    if (! init_rand)
@@ -259,36 +175,32 @@ char *randbox_pick (RandBox **rb)
    }
 
    // Choose random integer
-   int choice = rand() % randbox_size(rb) + 1;
+   int choice = rand() % this->size() + 1;
 
    // Loop through RandBox until element is picked
-   for (Element *curr = (*rb)->first; curr != NULL; curr = curr->next)
+   for (auto itor = this->elements.begin(); itor != this->elements.end();
+        ++itor)
    {
       // Subtract from random number
-      choice -= curr->amount;
+      choice -= itor->second;
 
       // If random number becomes zero, return chosen element
-      if (choice <= 0) return curr->name;
+      if (choice <= 0) return itor->first;
    }
-   return &*failed.begin();
+   return failed;
 }
 
 /**
  * Chooses multiple random elements from RandBox
  *
- * @param rb: Reference to RandBox
- * @param choice_list: Reference to array of elements chosen from RandBox
  * @param amount: Amount of elements to be picked
- * @return
+ * @return vector of random elements from RandBox
  */
-void randbox_mult_pick (RandBox **rb, char ***choice_list, int amount)
+vector<string> RandBox::mult_pick (int amount)
 {
-   *choice_list = (char **) malloc(sizeof(char*) * amount);
+   vector<string> choice_list;
 
    // Loop through pick function 
-   for (int i = 0; i < amount; i++)
-   {
-      (*choice_list)[i] = (char *) malloc(sizeof(char) * 100);
-      strcpy((*choice_list)[i], randbox_pick(rb));
-   }
+   for (int i = 0; i < amount; i++) choice_list.push_back(this->pick());
+   return choice_list;
 }
