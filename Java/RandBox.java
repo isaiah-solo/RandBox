@@ -21,7 +21,7 @@ public class RandBox {
    /**
     * HashMap containing elements in RandBox
     */
-   private HashMap<String, Integer> map;
+   private HashMap<Object, Integer> map;
 
    /**
     * Default class constructor
@@ -36,12 +36,12 @@ public class RandBox {
     *
     * @param list: List of elements to add
     */
-   public RandBox (String[] array) {
+   public RandBox (Object[] array) {
       // Initialize new HashMap
       this.map = new HashMap<>();
 
       // Loop through array elements
-      for (String elem: array) {
+      for (Object elem: array) {
          // If element not found in HashMap
          if (this.map.get(elem) == null) {
             // Add to HashMap
@@ -64,12 +64,12 @@ public class RandBox {
     *
     * @param list: List of elements to add
     */
-   public RandBox (List<String> list) {
+   public RandBox (List<Object> list) {
       // Initialize new HashMap
       this.map = new HashMap<>();
 
       // Loop through list elements
-      for (String elem: list) {
+      for (Object elem: list) {
          // If element not found in HashMap
          if (this.map.get(elem) == null) {
             // Add to HashMap
@@ -114,7 +114,7 @@ public class RandBox {
     * @param amount: amount of 'newElem' to be added
     * @return
     */
-   public void add (String newElem, int amount) {
+   public void add (Object newElem, int amount) {
       // If invalid amount
       if (amount < 1) return;
 
@@ -140,7 +140,7 @@ public class RandBox {
     * @param amount: amount of 'newElem' to be deleted
     * @return
     */
-   public void delete (String elem, int amount) {
+   public void delete (Object elem, int amount) {
       // If element is not in RandBox
       if (! this.map.containsKey(elem)) return;
 
@@ -173,7 +173,7 @@ public class RandBox {
     * @param elem: String of element to check probability of
     * @return Float containing probability of element
     */
-   public float probability (String elem) {
+   public float probability (Object elem) {
       // Set initial probability to zero
       float probability = ZERO;
 
@@ -191,9 +191,9 @@ public class RandBox {
     *
     * @return String of randomly picked element
     */
-   public String pick () {
+   public Object pick () {
       // Initialize chosen element variable to empty String
-      String chosenElem = EMPTY;
+      Object chosenElem = EMPTY;
 
       // New Random object
       Random rand = new Random();
@@ -202,8 +202,8 @@ public class RandBox {
       int choice = rand.nextInt(this.size()) + INIT;
 
       // Loop through each element
-      Set<Map.Entry<String, Integer>> set = map.entrySet();
-      for (Map.Entry<String, Integer> elem: set) {
+      Set<Map.Entry<Object, Integer>> set = map.entrySet();
+      for (Map.Entry<Object, Integer> elem: set) {
          int elemValue = elem.getValue().intValue();
 
          // Subtract from random integer as RandBox is iterated
@@ -224,9 +224,9 @@ public class RandBox {
     * @param amount: Amount of random elements to be picked
     * @return List containing Strings of all randomly picked elements
     */
-   public List<String> multPick (int amount) {
+   public List<Object> multPick (int amount) {
       // Create initial list of random integers
-      List<String> choiceList = new ArrayList<>();
+      List<Object> choiceList = new ArrayList<>();
 
       // If invalid amount
       if (amount < 1) return choiceList;

@@ -4,17 +4,18 @@ import randbox.*;
 public class example {
    public static void main (String[] args) {
       // Variables to declare 
-      String[] array = {"blue", "green", "purple"};
+      Object[] array = {(Object) "blue", (Object) "green", (Object) "purple"};
+      Object redString = (Object) "red";
       int green = 0, red = 0, blue = 0, purple = 0;
       
       // Initialize new Randbox using an array of elements
       RandBox rb = new RandBox(array);
       
       // Add elements to RandBox
-      rb.add("red", 5);
+      rb.add(redString, 5);
       
       // Delete elements from RandBox
-      rb.delete("red", 2);
+      rb.delete(redString, 2);
 
       // Displaying probability of selected elements from RandBox
       System.out.println("Red = " + String.valueOf(
@@ -31,13 +32,13 @@ public class example {
       System.out.println(rb.pick() + "\n");
       
       // Pick multiple random elements from RandBox
-      List<String> list = rb.multPick(20);
+      List<Object> list = rb.multPick(20);
       
-      for (String elem: list) {
-         if (elem.equals("red")) red++;
-         if (elem.equals("blue")) blue++;
-         if (elem.equals("green")) green++;
-         if (elem.equals("purple")) purple++;
+      for (Object elem: list) {
+         if (((String) elem).equals("red")) red++;
+         if (((String) elem).equals("blue")) blue++;
+         if (((String) elem).equals("green")) green++;
+         if (((String) elem).equals("purple")) purple++;
       }
       
       System.out.println("Random 20 strings:");
