@@ -34,7 +34,7 @@ public class RandBox {
    /**
     * Class constructor specifying array of elements to add
     *
-    * @param list: List of elements to add
+    * @param list List of elements to add
     */
    public RandBox (Object[] array) {
       // Initialize new HashMap
@@ -62,7 +62,7 @@ public class RandBox {
    /**
     * Class constructor specifying list of elements to add
     *
-    * @param list: List of elements to add
+    * @param list List of elements to add
     */
    public RandBox (List<Object> list) {
       // Initialize new HashMap
@@ -110,9 +110,8 @@ public class RandBox {
    /**
     * Adds one or more elements to the RandBox
     *
-    * @param newElem: String containing new element to be added
-    * @param amount: amount of 'newElem' to be added
-    * @return
+    * @param newElem New element to be added
+    * @param amount Amount of elements to be added
     */
    public void add (Object newElem, int amount) {
       // If invalid amount
@@ -136,9 +135,8 @@ public class RandBox {
    /**
     * Deletes specified element from RandBox
     *
-    * @param elem: String containing element to be deleted
-    * @param amount: amount of 'newElem' to be deleted
-    * @return
+    * @param elem: Element to be deleted
+    * @param amount: Amount of elements to be deleted
     */
    public void delete (Object elem, int amount) {
       // If element is not in RandBox
@@ -159,8 +157,6 @@ public class RandBox {
 
    /**
     * Deletes all elements from RandBox
-    *
-    * @return
     */
    public void deleteAll () {
       // Clear all in RandBox
@@ -170,7 +166,7 @@ public class RandBox {
    /**
     * Returns probability of specified element
     *
-    * @param elem: String of element to check probability of
+    * @param elem: Element to check probability of
     * @return Float containing probability of element
     */
    public float probability (Object elem) {
@@ -189,7 +185,7 @@ public class RandBox {
    /**
     * Chooses a random element from RandBox
     *
-    * @return String of randomly picked element
+    * @return Randomly picked element
     */
    public Object pick () {
       // Initialize chosen element variable to empty String
@@ -222,7 +218,7 @@ public class RandBox {
     * Chooses multiple random elements from RandBox
     *
     * @param amount: Amount of random elements to be picked
-    * @return List containing Strings of all randomly picked elements
+    * @return List containing all randomly picked elements
     */
    public List<Object> multPick (int amount) {
       // Create initial list of random integers
