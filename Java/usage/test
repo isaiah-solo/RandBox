@@ -1,6 +1,0 @@
-#!/bin/bash
-
-javac -d . *.java ../*.java
-java example
-rm *.class
-rm -r randbox

@@ -1,11 +1,11 @@
-package randbox;
+package com.isaiah_solo.library;
 
 import java.util.*;
 
 /**
- * RANDBOX: Java Version
+ * RandBox: Java Library
  *
- * Created by isayyuhh on 2/7/2016
+ * Created by isaiah on 2/7/2016
  */
 public class RandBox {
 
@@ -27,7 +27,6 @@ public class RandBox {
     * Default class constructor
     */
    public RandBox () {
-      // Initialize new HashMap
       this.map = new HashMap<>();
    }
 
@@ -93,7 +92,6 @@ public class RandBox {
     * @return Integer containing amount of elements in RandBox
     */
    public int size () {
-      // Set initial size to zero
       int size = ZERO;
 
       // Get all values in RandBox
