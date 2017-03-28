@@ -1,4 +1,4 @@
-package com.isaiah_solo.library;
+package io.github.isaiah_solo;
 
 import java.util.*;
 

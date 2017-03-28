@@ -1,4 +1,4 @@
-package com.isaiah_solo.library;
+package com.github.isaiah_solo;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
